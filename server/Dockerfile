@@ -3,7 +3,7 @@
 #COPY pom.xml /
 #RUN mvn -f /pom.xml clean package
 
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-alpine
 #COPY --from=build /target/*.jar application.jar
 COPY /target/*.jar application.jar
 EXPOSE 8082

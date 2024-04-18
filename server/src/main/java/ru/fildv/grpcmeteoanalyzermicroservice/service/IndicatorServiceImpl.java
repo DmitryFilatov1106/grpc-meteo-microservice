@@ -16,17 +16,19 @@ public class IndicatorServiceImpl implements IndicatorService {
     private final IndicatorRepository indicatorRepository;
 
     @Override
-    public void save(Indicator indicator) {
+    public void save(final Indicator indicator) {
         log.info("Data object {} was saved", indicator);
         indicatorRepository.save(indicator);
     }
 
     @Override
     @Transactional
-    public List<Indicator> get(long batchSize) {
-        List<Indicator> indicators = indicatorRepository.findAllWithOffset(batchSize);
+    public List<Indicator> get(final long batchSize) {
+        List<Indicator> indicators
+                = indicatorRepository.findAllWithOffset(batchSize);
         if (indicators.size() > 0) {
-            indicatorRepository.incrementOffset(Long.min(batchSize, indicators.size()));
+            indicatorRepository.incrementOffset(
+                    Long.min(batchSize, indicators.size()));
         }
         return indicators;
     }

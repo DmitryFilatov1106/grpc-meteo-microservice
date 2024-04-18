@@ -21,7 +21,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Slf4j
 public class GDataServiceImpl implements GDataService {
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService executorService
+            = Executors.newSingleThreadScheduledExecutor();
     private final SummaryService summaryService;
 
     @GrpcClient(value = "data-store-async")
@@ -44,12 +45,12 @@ public class GDataServiceImpl implements GDataService {
                                 .build(),
                         new StreamObserver<>() {
                             @Override
-                            public void onNext(GIndicator gIndicator) {
+                            public void onNext(final GIndicator gIndicator) {
                                 summaryService.save(new Indicator(gIndicator));
                             }
 
                             @Override
-                            public void onError(Throwable throwable) {
+                            public void onError(final Throwable throwable) {
                             }
 
                             @Override

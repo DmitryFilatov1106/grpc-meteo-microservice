@@ -1,7 +1,11 @@
 package ru.fildv.datastoregrpcmicroservice.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.fildv.datastoregrpcmicroservice.model.MeteoType;
 import ru.fildv.datastoregrpcmicroservice.model.Summary;
 import ru.fildv.datastoregrpcmicroservice.model.SummaryType;
@@ -20,10 +24,10 @@ public class AnalyticsController {
 
     @GetMapping("/summary/{meteoId}")
     public SummaryDto getSummary(
-            @PathVariable long meteoId,
-            @RequestParam(value = "mt", required = false)
+            final @PathVariable long meteoId,
+            final @RequestParam(value = "mt", required = false)
             Set<MeteoType> meteoTypes,
-            @RequestParam(value = "st", required = false)
+            final @RequestParam(value = "st", required = false)
             Set<SummaryType> summaryTypes
     ) {
         Summary summary = summaryService.get(meteoId, meteoTypes, summaryTypes);

@@ -17,14 +17,15 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Service
 public class TestIndicatorServiceImpl implements TestIndicatorService {
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService executorService
+            = Executors.newSingleThreadScheduledExecutor();
     private final GIndicatorService gIndicatorService;
 
     @Value("${push.batch-size}")
     private int batchSize;
 
     @Override
-    public void sendMessages(IndicatorTestOptions testOptions) {
+    public void sendMessages(final IndicatorTestOptions testOptions) {
         List<Indicator> indicators = new ArrayList<>();
         if (testOptions.getMeteoTypes().length > 0) {
             executorService.scheduleAtFixedRate(() -> {
@@ -32,16 +33,17 @@ public class TestIndicatorServiceImpl implements TestIndicatorService {
                         .meteoId((long) getRandomNumber(1, 5))
                         .timestamp(LocalDateTime.now())
 //                        .value(getRandomNumber(1, 1))
-                        .meteoType(getRandomMeasurement(testOptions.getMeteoTypes()))
+                        .meteoType(getRandomMeasurement(
+                                testOptions.getMeteoTypes()))
                         .build();
 
-                if(indicator.getMeteoType() == MeteoType.TEMPERATURE){
+                if (indicator.getMeteoType() == MeteoType.TEMPERATURE) {
                     indicator.setValue(getRandomNumber(-60, 60));
                 }
-                if(indicator.getMeteoType() == MeteoType.HUMIDITY){
+                if (indicator.getMeteoType() == MeteoType.HUMIDITY) {
                     indicator.setValue(getRandomNumber(1, 100));
                 }
-                if(indicator.getMeteoType() == MeteoType.PRESSURE){
+                if (indicator.getMeteoType() == MeteoType.PRESSURE) {
                     indicator.setValue(getRandomNumber(637, 812));
                 }
 
@@ -54,11 +56,11 @@ public class TestIndicatorServiceImpl implements TestIndicatorService {
         }
     }
 
-    private double getRandomNumber(int from, int to) {
+    private double getRandomNumber(final int from, final int to) {
         return from + Math.random() * (to - from);
     }
 
-    private MeteoType getRandomMeasurement(MeteoType[] measurementTypes) {
+    private MeteoType getRandomMeasurement(final MeteoType[] measurementTypes) {
         int randomTypeId = (int) (Math.random() * measurementTypes.length);
         return measurementTypes[randomTypeId];
     }

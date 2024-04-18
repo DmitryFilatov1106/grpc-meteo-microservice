@@ -2,6 +2,7 @@ package ru.fildv.datastoregrpcmicroservice.config;
 
 import lombok.experimental.UtilityClass;
 import ru.fildv.datastoregrpcmicroservice.model.MeteoType;
+
 @UtilityClass
 public class RedisSchema {
     //set
@@ -10,7 +11,8 @@ public class RedisSchema {
     }
 
     //hash with summary types
-    public String summaryKey(long meteoId, MeteoType meteoType) {
-        return KeyHelper.getKey("meteo:" + meteoId + ":" + meteoType.name().toLowerCase());
+    public String summaryKey(final long meteoId, final MeteoType meteoType) {
+        return KeyHelper.getKey("meteo:" + meteoId + ":"
+                + meteoType.name().toLowerCase());
     }
 }

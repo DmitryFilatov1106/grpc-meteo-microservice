@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import ru.fildv.grpcmeteogeneratormicroservice.service.GIndicatorService;
 import ru.fildv.grpcmeteogeneratormicroservice.model.Indicator;
 import ru.fildv.grpcmeteogeneratormicroservice.model.test.IndicatorTestOptions;
+import ru.fildv.grpcmeteogeneratormicroservice.service.GIndicatorService;
 import ru.fildv.grpcmeteogeneratormicroservice.service.TestIndicatorService;
 import ru.fildv.grpcmeteogeneratormicroservice.web.dto.IndicatorDto;
 import ru.fildv.grpcmeteogeneratormicroservice.web.dto.IndicatorTestOptionsDto;
@@ -28,15 +27,17 @@ public class IndicatorController {
     private final IndicatorTestOptionsMapper indicatorTestOptionsMapper;
 
     @PostMapping("/send")
-    public void send(@RequestBody IndicatorDto indicatorDto) {
+    public void send(final @RequestBody IndicatorDto indicatorDto) {
         Indicator indicator = indicatorMapper.toEntity(indicatorDto);
         log.info("Was get {}", indicator);
         gIndicatorService.send(indicator);
     }
 
     @PostMapping("/test/send")
-    public void testSend(@RequestBody IndicatorTestOptionsDto testOptionsDto) {
-        IndicatorTestOptions testOptions = indicatorTestOptionsMapper.toEntity(testOptionsDto);
+    public void testSend(final @RequestBody
+                             IndicatorTestOptionsDto testOptionsDto) {
+        IndicatorTestOptions testOptions
+                = indicatorTestOptionsMapper.toEntity(testOptionsDto);
         testIndicatorService.sendMessages(testOptions);
     }
 }

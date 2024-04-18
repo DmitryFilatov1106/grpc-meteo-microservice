@@ -8,12 +8,12 @@ import ru.fildv.datastoregrpcmicroservice.model.exception.IndicatorNotFoundExcep
 public class ControllerAdvice {
 
     @ExceptionHandler(IndicatorNotFoundException.class)
-    public String indicatorNotFound(IndicatorNotFoundException e) {
+    public String indicatorNotFound(final IndicatorNotFoundException e) {
         return "Indicator not found.";
     }
 
     @ExceptionHandler
-    public String serverException(Exception e) {
+    public String serverException(final Exception e) {
         e.printStackTrace();
         return "Bad thing happened for server.";
     }

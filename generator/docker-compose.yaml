@@ -1,4 +1,4 @@
-version: '3'
+version: '3.0'
 
 # docker network create grpc_net --driver bridge
 networks:
@@ -7,10 +7,11 @@ networks:
     external: true
 
 services:
-  appgen:
+  generator:
     build:
       context: .
-    container_name: meteo-generator
+    image: generator-app-grpc:1.0
+    container_name: generator-app-grpc
     networks:
       - net
     env_file:

@@ -14,21 +14,23 @@ public class GIndicatorService extends MeteoServerGrpc.MeteoServerImplBase {
     private final IndicatorService indicatorService;
 
     @Override
-    public void addIndicator(GIndicator gIndicator, StreamObserver<Empty> observer) {
+    public void addIndicator(final GIndicator gIndicator,
+                             final StreamObserver<Empty> observer) {
         save(gIndicator);
         sayCompleted(observer);
     }
 
     @Override
-    public StreamObserver<GIndicator> addStreamOfIndicator(StreamObserver<Empty> observer) {
+    public StreamObserver<GIndicator> addStreamOfIndicator(
+            final StreamObserver<Empty> observer) {
         return new StreamObserver<>() {
             @Override
-            public void onNext(GIndicator gIndicator) {
+            public void onNext(final GIndicator gIndicator) {
                 save(gIndicator);
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(final Throwable throwable) {
             }
 
             @Override
@@ -38,12 +40,12 @@ public class GIndicatorService extends MeteoServerGrpc.MeteoServerImplBase {
         };
     }
 
-    private void save(GIndicator request) {
+    private void save(final GIndicator request) {
         Indicator indicator = new Indicator(request);
         indicatorService.save(indicator);
     }
 
-    private static void sayCompleted(StreamObserver<Empty> observer) {
+    private static void sayCompleted(final StreamObserver<Empty> observer) {
         observer.onNext(Empty.newBuilder().build());
         observer.onCompleted();
     }

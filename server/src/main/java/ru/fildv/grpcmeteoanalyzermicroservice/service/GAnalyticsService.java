@@ -17,12 +17,15 @@ import java.util.List;
 @GrpcService
 @Slf4j
 @RequiredArgsConstructor
-public class GAnalyticsService extends AnalyticsServerGrpc.AnalyticsServerImplBase {
+public class GAnalyticsService
+        extends AnalyticsServerGrpc.AnalyticsServerImplBase {
     private final IndicatorService indicatorService;
 
     @Override
-    public void getIndicators(GAnalyticsRequest request, StreamObserver<GIndicator> observer) {
-        List<Indicator> indicators = indicatorService.get(request.getBatchSize());
+    public void getIndicators(final GAnalyticsRequest request,
+                              final StreamObserver<GIndicator> observer) {
+        List<Indicator> indicators
+                = indicatorService.get(request.getBatchSize());
         for (Indicator indicator : indicators) {
             GIndicator gIndicator = GIndicator.newBuilder()
                     .setMeteoId(indicator.getMeteoId())
@@ -30,11 +33,14 @@ public class GAnalyticsService extends AnalyticsServerGrpc.AnalyticsServerImplBa
                             Timestamp.newBuilder()
                                     .setSeconds(
                                             indicator.getTimestamp()
-                                                    .toEpochSecond(ZoneOffset.UTC)
+                                                    .toEpochSecond(
+                                                            ZoneOffset.UTC)
                                     )
                                     .build())
                     .setValue(indicator.getValue())
-                    .setMeteoType(GMeteoType.valueOf(indicator.getMeteoType().name()))
+                    .setMeteoType(
+                            GMeteoType.valueOf(
+                                    indicator.getMeteoType().name()))
                     .build();
             observer.onNext(gIndicator);
         }

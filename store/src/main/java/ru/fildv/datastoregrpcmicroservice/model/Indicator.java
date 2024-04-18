@@ -21,7 +21,7 @@ public class Indicator {
     private double value;
     private MeteoType meteoType;
 
-    public Indicator(GIndicator indicator) {
+    public Indicator(final GIndicator indicator) {
         this.id = indicator.getId();
         this.meteoId = indicator.getMeteoId();
         this.timestamp = LocalDateTime.ofInstant(

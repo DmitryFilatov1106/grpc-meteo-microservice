@@ -9,7 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface SummaryRepository {
-    Optional<Summary> findByMeteoId(long meteoId, Set<MeteoType> meteoTypes, Set<SummaryType> summaryTypes);
+    Optional<Summary> findByMeteoId(long meteoId, Set<MeteoType> meteoTypes,
+                                    Set<SummaryType> summaryTypes);
 
     void save(Indicator indicator);
 }

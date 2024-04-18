@@ -13,7 +13,7 @@ volumes:
 services:
   redis:
     image: redis:7.2-rc-alpine
-    container_name: redis-grpc-meteo
+    container_name: db-redis-grpc
     networks:
       - net
     ports:
@@ -22,10 +22,11 @@ services:
     volumes:
       - meteo-redis-data:/data
 
-  appstore:
+  store:
     build:
       context: .
-    container_name: meteo-store
+    image: store-app-grpc:1.0
+    container_name: store-app-grpc
     depends_on:
       - redis
     networks:

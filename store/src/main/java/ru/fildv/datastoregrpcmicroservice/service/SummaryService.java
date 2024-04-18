@@ -8,7 +8,8 @@ import ru.fildv.datastoregrpcmicroservice.model.SummaryType;
 import java.util.Set;
 
 public interface SummaryService {
-    Summary get(Long meteoId, Set<MeteoType> meteoTypes, Set<SummaryType> summaryTypes);
+    Summary get(Long meteoId, Set<MeteoType> meteoTypes,
+                Set<SummaryType> summaryTypes);
 
     void save(Indicator indicator);
 

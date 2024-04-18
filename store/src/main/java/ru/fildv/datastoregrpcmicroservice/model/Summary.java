@@ -28,7 +28,7 @@ public class Summary {
         private long counter;
     }
 
-    public void addValue(MeteoType type, SummaryEntry value) {
+    public void addValue(final MeteoType type, final SummaryEntry value) {
         if (values.containsKey(type)) {
             List<SummaryEntry> entries = new ArrayList<>(values.get(type));
             entries.add(value);

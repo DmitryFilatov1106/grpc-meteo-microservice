@@ -19,9 +19,12 @@ public class SummaryRepositoryImpl implements SummaryRepository {
     private final JedisPool jedisPool;
 
     @Override
-    public Optional<Summary> findByMeteoId(long meteoId, Set<MeteoType> meteoTypes, Set<SummaryType> summaryTypes) {
+    public Optional<Summary> findByMeteoId(final long meteoId,
+                                           final Set<MeteoType> meteoTypes,
+                                         final Set<SummaryType> summaryTypes) {
         try (Jedis jedis = jedisPool.getResource()) {
-            if (!jedis.sismember(RedisSchema.meteoKeys(), String.valueOf(meteoId))) {
+            if (!jedis.sismember(RedisSchema.meteoKeys(),
+                    String.valueOf(meteoId))) {
                 return Optional.empty();
             }
             if (meteoTypes.isEmpty() && !summaryTypes.isEmpty()) {
@@ -50,10 +53,10 @@ public class SummaryRepositoryImpl implements SummaryRepository {
     }
 
     private Optional<Summary> getSummary(
-            long meteoId,
-            Set<MeteoType> meteoTypes,
-            Set<SummaryType> summaryTypes,
-            Jedis jedis
+            final long meteoId,
+            final Set<MeteoType> meteoTypes,
+            final Set<SummaryType> summaryTypes,
+            final Jedis jedis
     ) {
         Summary summary = new Summary();
         summary.setMeteoId(meteoId);
@@ -82,7 +85,7 @@ public class SummaryRepositoryImpl implements SummaryRepository {
     }
 
     @Override
-    public void save(Indicator indicator) {
+    public void save(final Indicator indicator) {
         try (Jedis jedis = jedisPool.getResource()) {
             if (!jedis.sismember(
                     RedisSchema.meteoKeys(),
@@ -99,42 +102,54 @@ public class SummaryRepositoryImpl implements SummaryRepository {
         }
     }
 
-    private void updateMinValue(Indicator indicator, Jedis jedis) {
-        String key = RedisSchema.summaryKey(indicator.getMeteoId(), indicator.getMeteoType());
+    private void updateMinValue(final Indicator indicator, final Jedis jedis) {
+        String key = RedisSchema.summaryKey(indicator.getMeteoId(),
+                indicator.getMeteoType());
         String value = jedis.hget(key, SummaryType.MIN.name().toLowerCase());
         if (value == null || indicator.getValue() < Double.parseDouble(value)) {
-            jedis.hset(key, SummaryType.MIN.name().toLowerCase(), String.valueOf(indicator.getValue()));
+            jedis.hset(key, SummaryType.MIN.name().toLowerCase(),
+                    String.valueOf(indicator.getValue()));
         }
     }
 
-    private void updateMaxValue(Indicator indicator, Jedis jedis) {
-        String key = RedisSchema.summaryKey(indicator.getMeteoId(), indicator.getMeteoType());
+    private void updateMaxValue(final Indicator indicator, final Jedis jedis) {
+        String key = RedisSchema.summaryKey(indicator.getMeteoId(),
+                indicator.getMeteoType());
         String value = jedis.hget(key, SummaryType.MAX.name().toLowerCase());
         if (value == null || indicator.getValue() > Double.parseDouble(value)) {
-            jedis.hset(key, SummaryType.MAX.name().toLowerCase(), String.valueOf(indicator.getValue()));
+            jedis.hset(key, SummaryType.MAX.name().toLowerCase(),
+                    String.valueOf(indicator.getValue()));
         }
     }
 
-    private void updateSumAndAvgValue(Indicator indicator, Jedis jedis) {
+    private void updateSumAndAvgValue(final Indicator indicator,
+                                      final Jedis jedis) {
         updateSumValue(indicator, jedis);
-        String key = RedisSchema.summaryKey(indicator.getMeteoId(), indicator.getMeteoType());
+        String key = RedisSchema.summaryKey(indicator.getMeteoId(),
+                indicator.getMeteoType());
         String counter = jedis.hget(key, "counter");
         if (counter == null) {
-            counter = String.valueOf(jedis.hset(key, "counter", String.valueOf(1)));
+            counter = String.valueOf(jedis.hset(key, "counter",
+                    String.valueOf(1)));
         } else {
             counter = String.valueOf(jedis.hincrBy(key, "counter", 1));
         }
         String sum = jedis.hget(key, SummaryType.SUM.name().toLowerCase());
-        jedis.hset(key, SummaryType.AVG.name().toLowerCase(), String.valueOf(Double.parseDouble(sum) / Double.parseDouble(counter)));
+        jedis.hset(key, SummaryType.AVG.name().toLowerCase(),
+                String.valueOf(Double.parseDouble(sum)
+                        / Double.parseDouble(counter)));
     }
 
-    private void updateSumValue(Indicator indicator, Jedis jedis) {
-        String key = RedisSchema.summaryKey(indicator.getMeteoId(), indicator.getMeteoType());
+    private void updateSumValue(final Indicator indicator, final Jedis jedis) {
+        String key = RedisSchema.summaryKey(indicator.getMeteoId(),
+                indicator.getMeteoType());
         String value = jedis.hget(key, SummaryType.SUM.name().toLowerCase());
         if (value == null) {
-            jedis.hset(key, SummaryType.SUM.name().toLowerCase(), String.valueOf(indicator.getValue()));
+            jedis.hset(key, SummaryType.SUM.name().toLowerCase(),
+                    String.valueOf(indicator.getValue()));
         } else {
-            jedis.hincrByFloat(key, SummaryType.SUM.name().toLowerCase(), indicator.getValue());
+            jedis.hincrByFloat(key, SummaryType.SUM.name().toLowerCase(),
+                    indicator.getValue());
         }
     }
 }

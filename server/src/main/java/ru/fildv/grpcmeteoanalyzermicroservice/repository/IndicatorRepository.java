@@ -19,8 +19,8 @@ public interface IndicatorRepository extends JpaRepository<Indicator, Long> {
 
     @Modifying
     @Query(value = """
-                   UPDATE offsets
-                   SET current_offset = current_offset + :batchSize
-                   """, nativeQuery = true)
+            UPDATE offsets
+            SET current_offset = current_offset + :batchSize
+            """, nativeQuery = true)
     void incrementOffset(@Param("batchSize") long batchSize);
 }

@@ -24,7 +24,7 @@ public class GIndicatorServiceImpl implements GIndicatorService {
     private MeteoServerGrpc.MeteoServerStub asyncStub;
 
     @Override
-    public void send(Indicator indicator) {
+    public void send(final Indicator indicator) {
         GIndicator request = getGIndicator(indicator);
         log.info("GIndicator is ready!!");
         var resultEmpty = blockingStub.addIndicator(request);
@@ -36,9 +36,10 @@ public class GIndicatorServiceImpl implements GIndicatorService {
     }
 
     @Override
-    public void send(List<Indicator> indicators) {
+    public void send(final List<Indicator> indicators) {
         StreamObserver<Empty> responseObserver = getResponseObserver();
-        StreamObserver<GIndicator> observer = asyncStub.addStreamOfIndicator(responseObserver);
+        StreamObserver<GIndicator> observer
+                = asyncStub.addStreamOfIndicator(responseObserver);
         for (Indicator d : indicators) {
             GIndicator request = getGIndicator(d);
             observer.onNext(request);
@@ -46,28 +47,30 @@ public class GIndicatorServiceImpl implements GIndicatorService {
         observer.onCompleted();
     }
 
-    private static GIndicator getGIndicator(Indicator indicator) {
+    private static GIndicator getGIndicator(final Indicator indicator) {
         return GIndicator.newBuilder()
                 .setMeteoId(indicator.getMeteoId())
                 .setTimestamp(
                         Timestamp.newBuilder()
                                 .setSeconds(
-                                        indicator.getTimestamp().toEpochSecond(ZoneOffset.UTC)
+                                        indicator.getTimestamp().toEpochSecond(
+                                                ZoneOffset.UTC)
                                 )
                                 .build())
                 .setValue(indicator.getValue())
-                .setMeteoType(GMeteoType.valueOf(indicator.getMeteoType().name()))
+                .setMeteoType(GMeteoType.valueOf(
+                        indicator.getMeteoType().name()))
                 .build();
     }
 
     private static StreamObserver<Empty> getResponseObserver() {
         return new StreamObserver<>() {
             @Override
-            public void onNext(Empty empty) {
+            public void onNext(final Empty empty) {
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(final Throwable throwable) {
             }
 
             @Override

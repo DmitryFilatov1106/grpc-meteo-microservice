@@ -17,17 +17,21 @@ public class SummaryServiceImpl implements SummaryService {
     private final SummaryRepository summaryRepository;
 
     @Override
-    public Summary get(Long meteoId, Set<MeteoType> meteoTypes, Set<SummaryType> summaryTypes) {
+    public Summary get(final Long meteoId,
+                       final Set<MeteoType> meteoTypes,
+                       final Set<SummaryType> summaryTypes) {
         return summaryRepository.findByMeteoId(
                         meteoId,
-                        meteoTypes == null ? Set.of(MeteoType.values()) : meteoTypes,
-                        summaryTypes == null ? Set.of(SummaryType.values()) : summaryTypes
+                        meteoTypes == null ? Set.of(MeteoType.values())
+                                : meteoTypes,
+                        summaryTypes == null ? Set.of(SummaryType.values())
+                                : summaryTypes
                 )
                 .orElseThrow(IndicatorNotFoundException::new);
     }
 
     @Override
-    public void save(Indicator indicator) {
+    public void save(final Indicator indicator) {
         summaryRepository.save(indicator);
     }
 }

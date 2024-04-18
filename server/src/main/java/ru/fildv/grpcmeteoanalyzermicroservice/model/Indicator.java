@@ -1,6 +1,13 @@
 package ru.fildv.grpcmeteoanalyzermicroservice.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -30,7 +37,7 @@ public class Indicator {
     @Enumerated(value = EnumType.STRING)
     private MeteoType meteoType;
 
-    public Indicator(GIndicator indicator) {
+    public Indicator(final GIndicator indicator) {
         this.id = indicator.getId();
         this.meteoId = indicator.getMeteoId();
         this.timestamp = LocalDateTime.ofInstant(

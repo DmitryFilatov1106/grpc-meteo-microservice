@@ -3,17 +3,18 @@ package ru.fildv.datastoregrpcmicroservice.config;
 import lombok.experimental.UtilityClass;
 
 import java.util.Objects;
+
 @UtilityClass
 public class KeyHelper {
     private final String defaultPrefix = "app";
 
     private String prefix = null;
 
-    public void setPrefix(String keyPrefix) {
+    public void setPrefix(final String keyPrefix) {
         prefix = keyPrefix;
     }
 
-    public String getKey(String key) {
+    public String getKey(final String key) {
         return getPrefix() + ":" + key;
     }
 
