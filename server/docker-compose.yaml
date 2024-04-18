@@ -1,0 +1,38 @@
+version: '3'
+
+# docker network create grpc_net --driver bridge
+networks:
+  net:
+    name: grpc_net
+    external: true
+
+volumes:
+  meteo-db-data:
+    driver: local
+
+
+services:
+  dbase:
+    image: 'postgres:15.1-alpine'
+    container_name: postgres-grpc-meteo
+    networks:
+      - net
+    env_file:
+      - .env
+    ports:
+      - '5433:5432'
+    volumes:
+      - meteo-db-data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+    container_name: meteo-server
+    depends_on:
+      - dbase
+    networks:
+      - net
+    env_file:
+      - .env
+    ports:
+      - '8082:8082'

@@ -1,0 +1,13 @@
+server.port: 8081
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+grpc:
+  client:
+    GLOBAL:
+      address: ${GRPC_SERVER}
+      negotiation-type: plaintext
+
+push.batch-size: ${BATCH_SIZE}
